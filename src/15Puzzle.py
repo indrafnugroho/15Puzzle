@@ -131,6 +131,7 @@ def moveRight(m,x,y) :
 	swapTiles(m,x,y,x,y+1)
 
 def searchMatrix(arr,m) :
+	#return true if m matches in any arr item
 	found = False
 	for i in arr:
 		if (i == m):
@@ -138,11 +139,11 @@ def searchMatrix(arr,m) :
 			break
 	return found
 	
-def solvePuzzle(mInit, mGoal, x, y):
+def solvePuzzle(mInit, mGoal):
+	node = 0
 	#make PrioQueue
-	simpul = 0
 	prioQ = PriorityQueue()
-	cost = calcCost(0, mInit, mGoal) #level 0, in root, to Goal
+	cost = calcCost(0, mInit, mGoal) #level 0, on root, to Goal
 	mGInit = []
 	mGInit.append(copy.deepcopy(mInit))
 	prioQ.insert((cost, 0, mInit, mGInit))
@@ -153,13 +154,15 @@ def solvePuzzle(mInit, mGoal, x, y):
 		finish_time = time.time()
 		printPath(mGenerated)
 		print("Execution time: %s seconds" % (round(finish_time - start_time, 4)))
-		print("Generated nodes: ", simpul)
+		print("Generated nodes: ", node)
 
 	while (not prioQ.isEmpty() and not isSolved):
+		#pop first element of prioqueue
 		minPuzzle = prioQ.delete()
 		(oldX,oldY) = findBlankTile(minPuzzle[2])
 		
 		#create a child node and calculate its cost 
+		#iterate for each possible move (4 for up down left right)
 		for i in range(4):
 			child = copy.deepcopy(minPuzzle[2])
 			enter = False
@@ -176,9 +179,11 @@ def solvePuzzle(mInit, mGoal, x, y):
 				moveRight(child, oldX, oldY)
 				enter = True
 
+			#if move valid
 			if (enter):
+				#node will be generated if it hasn't been generated before
 				if (not searchMatrix(minPuzzle[3], child)):
-					simpul += 1
+					node += 1
 					childCost = calcCost(minPuzzle[1]+1, child, mGoal)
 					mGenerated = copy.deepcopy(minPuzzle[3])
 					mGenerated.append(copy.deepcopy(child))
@@ -186,19 +191,22 @@ def solvePuzzle(mInit, mGoal, x, y):
 						finish_time = time.time()
 						printPath(mGenerated)
 						print("Execution time: %s seconds" % (round(finish_time - start_time, 4)))
-						print("Generated nodes: ", simpul)
+						print("Generated nodes: ", node)
 						isSolved = True
 						break
 					else:
+						#push node into prioqueue as it will be checked again in above section
 						prioQ.insert((childCost, minPuzzle[1]+1, copy.deepcopy(child), copy.deepcopy(mGenerated)))
 				
 def main() :
+    #read input matrix from file
     fileName = input("Input filename: ")
 
-    with open(fileName, "r") as f:
+    with open("../test/" + fileName, "r") as f:
     	initial = [[int(num) for num in line.split(' ')] for line in f]
     
     (x,y) = findBlankTile(initial)
+    #initialize goal state
     final = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]
 
     print("Initial Matrix")
@@ -209,7 +217,7 @@ def main() :
     if (isReachable(initial, x, y)):
     	print()
     	print("Path of Matrices to solve the puzzle")
-    	solvePuzzle(initial,final,x,y)
+    	solvePuzzle(initial,final)
     else:
     	print("Puzzle cannot be solved")
 
