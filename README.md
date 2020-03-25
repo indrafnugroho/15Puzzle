@@ -5,7 +5,7 @@ a Python based program to solve 15-Puzzle problem
 Follow instructions below to run my program in your beloved computer
 
 ### Prerequisites
-* Make sure you have Python installed in your computer
+* Make sure you have Python 3 installed in your computer
 * Put your own testcase(s) (if any) in the test folder
 
 ### Windows
@@ -18,7 +18,7 @@ Follow instructions below to run my program in your beloved computer
 ### Linux
 * open folder src
 * run terminal
-* type in "python 15Puzzle.py" without ""
+* type in "python3 15Puzzle.py" without ""
 * input filename
 * voila
 
