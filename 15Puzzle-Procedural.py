@@ -150,8 +150,9 @@ def solvePuzzle(mInit, mGoal, x, y):
 	start_time = time.time()
 	isSolved = isPuzzleSolved(mInit, mGoal)
 	if (isSolved):
+		finish_time = time.time()
 		printPath(mGenerated)
-		print("Execution time: %s seconds" % (round(time.time() - start_time, 4)))
+		print("Execution time: %s seconds" % (round(finish_time - start_time, 4)))
 		print("Generated nodes: ", simpul)
 
 	while (not prioQ.isEmpty() and not isSolved):
@@ -182,8 +183,9 @@ def solvePuzzle(mInit, mGoal, x, y):
 					mGenerated = copy.deepcopy(minPuzzle[3])
 					mGenerated.append(copy.deepcopy(child))
 					if (isPuzzleSolved(child, mGoal)):
+						finish_time = time.time()
 						printPath(mGenerated)
-						print("Execution time: %s seconds" % (round(time.time() - start_time, 4)))
+						print("Execution time: %s seconds" % (round(finish_time - start_time, 4)))
 						print("Generated nodes: ", simpul)
 						isSolved = True
 						break
